@@ -1,0 +1,92 @@
+#!/bin/sh
+
+#########################################################################
+#
+#    * DO NOT REMOVE *
+#-----------------------------------------------------
+# PLUGIN_AUTHOR=Junos Admin
+# PLUGIN_CATEGORY=INSE
+# PLUGIN_DATE=2024-09-03
+# PLUGIN_DESC=Read out the inetd conf
+# PLUGIN_NAME=inetd_services
+# PLUGIN_REQUIRED_TESTS=
+# PLUGIN_PACKAGE=
+# PLUGIN_VERSION=0.1.0
+#-----------------------------------------------------
+#
+#########################################################################
+
+extract_inetd_fields() {
+    #start
+    LogText "Test: Obtain inetd services"
+
+    INET_SERVICES=$(${GREPBINARY} -e '^[a-zA-Z]' ${INETD_CONFIG_FILE} | ${AWKBINARY:-awk} -F' ' \
+    'BEGIN{
+        # Define a set of columns to be exluded from output
+        exclude_cols[0]=2;
+        exclude_cols[1]=3;
+        exclude_cols[2]=4;
+        exclude_cols[3]=5;
+    } 
+    {
+        # Only process lines that have service definitions
+        /^[a-z]/
+        {
+            for (i=1; i<=NF;i++) {
+                # Iterate over each columns and print the column.
+                skip=0;
+
+                for (idx in exclude_cols) {
+                    # Skip printing columns in exlucde list
+                    if( i==exclude_cols[idx] ) {
+                        skip=1;
+                    }
+                }
+                if (skip != 1) {
+                    printf("%s%s", $i, (i!=NF) ? " " : "\n");
+                }
+            }
+        }
+    }')
+
+    # define some constant
+    IFS_OLD=$IFS
+    IFS=$'\n'
+
+    for each_service in ${INET_SERVICES};
+    do
+        Report "inetd_services[]=$each_service"
+    done
+    IFS=$IFS_OLD
+}
+
+#########################################################################
+#
+    # Add custom section to screen output
+    InsertSection "INETD ENTRIES"
+#
+#################################################################################
+#
+    # Test        : INSE-CUST-0001
+    # Description : 
+
+    # Register our first custom test
+    # We consider it to be a lightweight test (no heavy IO, or long searches), no network connection needed
+    Register --test-no INSE-CUST-0001 --weight L --network NO --description "Collect list of services in inetd conf"
+    if [ ${SKIPTEST} -eq 0 ]; then
+        # The Display function makes it easy to show something on screen, with colors.
+        # --indent  defines amount of spaces
+        # --text    text to be displayed on screen
+        # --result  text at end of line
+        # --color   color of result text
+        Display --indent 2 --text "- Obtain inetd services" --result OK --color GREEN
+        extract_inetd_fields;
+    fi
+#
+#################################################################################
+#
+
+# Wait for keypress (unless --quick is being used)
+WaitForKeyPress
+
+#EOF

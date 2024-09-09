@@ -9,7 +9,7 @@ InsertSection "${SECTION_KERBEROS}"
     # Test        : KRB-1000
     # Description : Check that Kerberos principals have passwords that expire
     Register --test-no KRB-1000 --weight L --network NO --description "Check for Kerberos KDC tools"
-    if [ -n "${KADMINLOCALBINARY}" ] && [ -n "${KDB5UTILBINARY}" ]
+    if [ -n "${KADMINLOCALBINARY:-}" ] && [ -n "${KDB5UTILBINARY:-}" ]
     then
         PREQS_MET="YES"
         # Make sure krb5 debugging doesn't mess up the output

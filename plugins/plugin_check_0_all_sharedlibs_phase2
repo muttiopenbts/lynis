@@ -1,0 +1,70 @@
+#!/bin/sh
+
+#########################################################################
+#
+#    * DO NOT REMOVE *
+#-----------------------------------------------------
+# PLUGIN_AUTHOR=Junos Admin
+# PLUGIN_CATEGORY=BINS
+# PLUGIN_DATE=2024-09-03
+# PLUGIN_DESC=A test to find all shared libraries
+# PLUGIN_NAME=check_0_all_sharedlibs
+# PLUGIN_PACKAGE=
+# PLUGIN_REQUIRED_TESTS=
+# PLUGIN_VERSION=0.1.0
+#-----------------------------------------------------
+#
+#########################################################################
+
+# Make this global for reuse in other tests
+LIB_FILES=''
+
+get_all_sharedlibs() {
+    # define some constant
+    IFS_OLD=$IFS
+    IFS=$'\n' 
+    #start
+    LogText "Test: Obtain all shared library file names"
+    libbin_files=$(${FINDBINARY} / -type f -exec file -i '{}' \; | ${GREPBINARY} 'application/x-sharedlib; charset=binary' | ${CUTBINARY}  -d':' -f 1)
+    LIB_FILES="${libbin_files}"
+    count=$(echo -e "${libbin_files}" | wc -l) 
+
+    Report "libbin_files_count[]=$count"
+
+    for each_file in ${libbin_files};
+    do
+        Report "libbin_files[]=$each_file"
+    done
+    IFS=$IFS_OLD
+}
+
+#########################################################################
+#
+    # Add custom section to screen output
+    InsertSection "SHARED LIBRARIES"
+#
+#################################################################################
+#
+    # Test        : BINS-0002
+    # Description : We show some lines on the screen
+
+    # Register our first custom test
+    # We consider it to be a lightweight test (no heavy IO, or long searches), no network connection needed
+    Register --test-no BINS-0002 --weight L --network NO --description "A test to find all shared library files"
+    if [ ${SKIPTEST} -eq 0 ]; then
+        # The Display function makes it easy to show something on screen, with colors.
+        # --indent  defines amount of spaces
+        # --text    text to be displayed on screen
+        # --result  text at end of line
+        # --color   color of result text
+        Display --indent 2 --text "- Finding shared library file" --result OK --color GREEN
+        get_all_sharedlibs;
+    fi
+#
+#################################################################################
+#
+
+# Wait for keypress (unless --quick is being used)
+WaitForKeyPress
+
+#EOF

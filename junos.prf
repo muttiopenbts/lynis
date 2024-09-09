@@ -1,0 +1,816 @@
+#################################################################################
+#
+#
+# Lynis - Junos scan profile
+#
+#
+#################################################################################
+#
+# To discover where your profiles are located: lynis show profiles
+#
+#
+# Lynis performs a strict check on profiles to avoid the inclusion of
+# possibly harmful injections. See include/profiles for details.
+#
+#
+#################################################################################
+#
+# All empty lines or with the # prefix will be skipped
+#
+#################################################################################
+
+# Use colored output
+colors=yes
+
+# Compressed uploads (set to zero when errors with uploading occur)
+compressed-uploads=yes
+
+# Amount of connections in WAIT state before reporting it as a suggestion
+#connections-max-wait-state=5000
+
+# Debug mode (for debugging purposes, extra data logged to screen)
+#debug=yes
+
+# Show non-zero exit code when warnings are found
+error-on-warnings=no
+
+# Use Lynis in your own language (by default auto-detected)
+language=
+
+# Log tests from another guest operating system (default: yes)
+#log-tests-incorrect-os=yes
+
+# Define if available NTP daemon is configured as a server or client on the network
+# values: server or client (default: client)
+#ntpd-role=client
+
+# Defines the role of the system (personal, workstation or server)
+machine-role=server
+
+# Ignore some stratum 16 hosts (for example when running as time source itself)
+#ntp-ignore-stratum-16-peer=127.0.0.1
+
+# Profile name, will be used as title/description
+profile-name=Default Audit Template
+
+# Number of seconds to pause between every test (0 is no pause)
+pause-between-tests=0
+
+# Quick mode (do not wait for keypresses)
+quick=yes
+
+# Refresh software repositories to help detecting vulnerable packages
+refresh-repositories=no
+
+# Show solution for findings
+show-report-solution=yes
+
+# Show inline tips about the tool
+show-tool-tips=yes
+
+# Skip plugins
+skip-plugins=no
+
+# Skip Lynis upgrade availability test (default: no)
+skip-upgrade-test=yes
+
+# Locations where to search for SSL certificates (separate paths with a colon)
+ssl-certificate-paths=/etc/apache2:/etc/dovecot:/etc/httpd:/etc/letsencrypt:/etc/pki:/etc/postfix:/etc/refind.d/keys:/etc/ssl:/opt/psa/var/certificates:/usr/local/psa/var/certificates:/usr/local/share/ca-certificates:/usr/share/ca-certificates:/usr/share/gnupg:/var/www:/srv/www
+ssl-certificate-paths-to-ignore=/etc/letsencrypt/archive:
+ssl-certificate-include-packages=no
+
+# Scan type - how deep the audit should be (light, normal or full)
+test-scan-mode=full
+# Verbose output
+verbose=yes
+#################################################################################
+#
+# Plugins
+# ---------------
+# Define which plugins are enabled
+#
+# Notes:
+# - Nothing happens if plugin isn't available
+# - There is no order in execution of plugins
+# - See documentation about how to use plugins and phases
+# - Some are for Lynis Enterprise users only
+#
+#################################################################################
+
+# Lynis plugins to enable
+
+# Custom plugins
+plugin=check_suid_file
+plugin=check_all_binaries
+plugin=check_0_all_sharedlibs
+plugin=check_all_binary_libs
+plugin=check_all_sharedlib_libs
+
+disable-plugin=authentication
+disable-plugin=compliance
+disable-plugin=configuration
+disable-plugin=control-panels
+disable-plugin=crypto
+disable-plugin=dns
+disable-plugin=docker
+disable-plugin=firewalls
+disable-plugin=forensics
+disable-plugin=hardware
+disable-plugin=intrusion-detection
+disable-plugin=intrusion-prevention
+disable-plugin=kernel
+disable-plugin=malware
+disable-plugin=memory
+disable-plugin=nginx
+disable-plugin=pam
+disable-plugin=processes
+disable-plugin=security-modules
+disable-plugin=system-integrity
+disable-plugin=systemd
+disable-plugin=users
+disable-plugin=krb5
+
+skip-test=ACCT-2754
+skip-test=ACCT-2760
+skip-test=ACCT-9622
+skip-test=ACCT-9626
+skip-test=ACCT-9628
+skip-test=ACCT-9630
+skip-test=ACCT-9632
+skip-test=ACCT-9634
+skip-test=ACCT-9636
+skip-test=ACCT-9650
+skip-test=ACCT-9652
+skip-test=ACCT-9654
+skip-test=ACCT-9656
+skip-test=ACCT-9660
+skip-test=ACCT-9662
+skip-test=ACCT-9670
+skip-test=ACCT-9672
+skip-test=AUTH-9204
+skip-test=AUTH-9208
+skip-test=AUTH-9212
+skip-test=AUTH-9216
+skip-test=AUTH-9218
+skip-test=AUTH-9222
+skip-test=AUTH-9226
+skip-test=AUTH-9228
+skip-test=AUTH-9229
+skip-test=AUTH-9230
+skip-test=AUTH-9234
+skip-test=AUTH-9240
+skip-test=AUTH-9242
+skip-test=AUTH-9250
+skip-test=AUTH-9252
+skip-test=AUTH-9254
+skip-test=AUTH-9262
+skip-test=AUTH-9264
+skip-test=AUTH-9266
+skip-test=AUTH-9268
+skip-test=AUTH-9278
+skip-test=AUTH-9282
+skip-test=AUTH-9283
+skip-test=AUTH-9284
+skip-test=AUTH-9286
+skip-test=AUTH-9288
+skip-test=AUTH-9304
+skip-test=AUTH-9306
+skip-test=AUTH-9308
+skip-test=AUTH-9328
+skip-test=AUTH-9340
+skip-test=AUTH-9402
+skip-test=AUTH-9406
+skip-test=AUTH-9408
+skip-test=AUTH-9409
+skip-test=AUTH-9410
+skip-test=BANN-7113
+skip-test=BANN-7124
+skip-test=BANN-7126
+skip-test=BANN-7128
+skip-test=BANN-7130
+skip-test=BOOT-5102
+skip-test=BOOT-5104
+skip-test=BOOT-5106
+skip-test=BOOT-5108
+skip-test=BOOT-5109
+skip-test=BOOT-5116
+skip-test=BOOT-5117
+skip-test=BOOT-5121
+skip-test=BOOT-5122
+skip-test=BOOT-5124
+skip-test=BOOT-5126
+skip-test=BOOT-5139
+skip-test=BOOT-5140
+skip-test=BOOT-5142
+skip-test=BOOT-5155
+skip-test=BOOT-5159
+skip-test=BOOT-5165
+skip-test=BOOT-5170
+skip-test=BOOT-5177
+skip-test=BOOT-5180
+skip-test=BOOT-5184
+skip-test=BOOT-5202
+skip-test=BOOT-5260
+skip-test=BOOT-5261
+skip-test=BOOT-5262
+skip-test=BOOT-5263
+skip-test=BOOT-5264
+skip-test=CONT-8004
+skip-test=CONT-8102
+skip-test=CONT-8104
+skip-test=CONT-8106
+skip-test=CONT-8107
+skip-test=CONT-8108
+#skip-test=CORE-1000
+skip-test=CRYP-7902
+skip-test=CRYP-7930
+skip-test=CRYP-7931
+skip-test=CRYP-8002
+skip-test=CRYP-8004
+skip-test=CRYP-8005
+skip-test=CRYP-8006
+skip-test=DNS-1600
+skip-test=DBS-1804
+skip-test=DBS-1816
+skip-test=DBS-1818
+skip-test=DBS-1820
+skip-test=DBS-1826
+skip-test=DBS-1828
+skip-test=DBS-1840
+skip-test=DBS-1860
+skip-test=DBS-1880
+skip-test=DBS-1882
+skip-test=DBS-1884
+skip-test=DBS-1886
+skip-test=DBS-1888
+#skip-test=FILE-6310
+#skip-test=FILE-6311
+#skip-test=FILE-6312
+#skip-test=FILE-6323
+#skip-test=FILE-6329
+#skip-test=FILE-6330
+#skip-test=FILE-6332
+#skip-test=FILE-6336
+#skip-test=FILE-6344
+#skip-test=FILE-6354
+#skip-test=FILE-6362
+#skip-test=FILE-6363
+#skip-test=FILE-6368
+#skip-test=FILE-6372
+#skip-test=FILE-6374
+#skip-test=FILE-6376
+#skip-test=FILE-6394
+#skip-test=FILE-6410
+#skip-test=FILE-6430
+#skip-test=FILE-6439
+#skip-test=FILE-7524
+skip-test=FINT-4310
+skip-test=FINT-4314
+skip-test=FINT-4315
+skip-test=FINT-4316
+skip-test=FINT-4318
+skip-test=FINT-4322
+skip-test=FINT-4326
+skip-test=FINT-4328
+skip-test=FINT-4330
+skip-test=FINT-4334
+skip-test=FINT-4336
+skip-test=FINT-4338
+skip-test=FINT-4339
+skip-test=FINT-4340
+skip-test=FINT-4341
+skip-test=FINT-4350
+skip-test=FINT-4402
+skip-test=FIRE-4502
+skip-test=FIRE-4508
+skip-test=FIRE-4512
+skip-test=FIRE-4513
+skip-test=FIRE-4518
+skip-test=FIRE-4520
+skip-test=FIRE-4524
+skip-test=FIRE-4526
+skip-test=FIRE-4530
+skip-test=FIRE-4532
+skip-test=FIRE-4534
+skip-test=FIRE-4536
+skip-test=FIRE-4538
+skip-test=FIRE-4540
+skip-test=FIRE-4586
+skip-test=FIRE-4590
+skip-test=FIRE-4594
+#skip-test=HOME-9302
+#skip-test=HOME-9304
+#skip-test=HOME-9306
+#skip-test=HOME-9310
+skip-test=HOME-9350
+skip-test=HRDN-7220
+skip-test=HRDN-7222
+skip-test=HRDN-7230
+skip-test=HRDN-7231
+skip-test=HTTP-6622
+skip-test=HTTP-6624
+skip-test=HTTP-6626
+skip-test=HTTP-6632
+skip-test=HTTP-6640
+skip-test=HTTP-6641
+skip-test=HTTP-6643
+skip-test=HTTP-6702
+skip-test=HTTP-6704
+skip-test=HTTP-6706
+skip-test=HTTP-6708
+skip-test=HTTP-6710
+skip-test=HTTP-6712
+skip-test=HTTP-6714
+skip-test=HTTP-6716
+skip-test=HTTP-6720
+skip-test=INSE-8000
+skip-test=INSE-8002
+skip-test=INSE-8004
+skip-test=INSE-8006
+skip-test=INSE-8016
+skip-test=INSE-8050
+skip-test=INSE-8100
+skip-test=INSE-8116
+skip-test=INSE-8200
+skip-test=INSE-8300
+skip-test=INSE-8302
+skip-test=INSE-8310
+skip-test=INSE-8312
+skip-test=INSE-8314
+skip-test=INSE-8316
+skip-test=INSE-8318
+skip-test=INSE-8320
+skip-test=KRNL-5622
+skip-test=KRNL-5677
+skip-test=KRNL-5695
+skip-test=KRNL-5723
+skip-test=KRNL-5726
+skip-test=KRNL-5728
+skip-test=KRNL-5730
+skip-test=KRNL-5745
+skip-test=KRNL-5770
+skip-test=KRNL-5788
+skip-test=KRNL-5820
+skip-test=KRNL-5830
+skip-test=KRNL-5831
+skip-test=KRNL-6000
+skip-test=LDAP-2219
+skip-test=LDAP-2224
+skip-test=LOGG-2130
+skip-test=LOGG-2132
+skip-test=LOGG-2134
+skip-test=LOGG-2136
+skip-test=LOGG-2138
+skip-test=LOGG-2142
+skip-test=LOGG-2146
+skip-test=LOGG-2148
+skip-test=LOGG-2150
+skip-test=LOGG-2152
+skip-test=LOGG-2153
+skip-test=LOGG-2154
+skip-test=LOGG-2160
+skip-test=LOGG-2162
+skip-test=LOGG-2164
+skip-test=LOGG-2170
+skip-test=LOGG-2180
+skip-test=LOGG-2190
+skip-test=LOGG-2192
+skip-test=LOGG-2210
+skip-test=LOGG-2230
+skip-test=LOGG-2240
+skip-test=MACF-6204
+skip-test=MACF-6208
+skip-test=MACF-6232
+skip-test=MACF-6234
+skip-test=MACF-6240
+skip-test=MACF-6242
+skip-test=MACF-6290
+skip-test=MAIL-8802
+skip-test=MAIL-8804
+skip-test=MAIL-8814
+skip-test=MAIL-8816
+skip-test=MAIL-8817
+skip-test=MAIL-8818
+skip-test=MAIL-8820
+skip-test=MAIL-8838
+skip-test=MAIL-8860
+skip-test=MAIL-8880
+skip-test=MAIL-8920
+skip-test=MALW-3274
+skip-test=MALW-3275
+skip-test=MALW-3276
+skip-test=MALW-3278
+skip-test=MALW-3280
+skip-test=MALW-3282
+skip-test=MALW-3284
+skip-test=MALW-3286
+skip-test=MALW-3288
+skip-test=MALW-3290
+skip-test=NAME-4016
+skip-test=NAME-4018
+skip-test=NAME-4020
+skip-test=NAME-4024
+skip-test=NAME-4026
+skip-test=NAME-4028
+skip-test=NAME-4032
+skip-test=NAME-4034
+skip-test=NAME-4036
+skip-test=NAME-4202
+skip-test=NAME-4204
+skip-test=NAME-4206
+skip-test=NAME-4210
+skip-test=NAME-4230
+skip-test=NAME-4232
+skip-test=NAME-4236
+skip-test=NAME-4238
+skip-test=NAME-4304
+skip-test=NAME-4306
+skip-test=NAME-4402
+skip-test=NAME-4404
+skip-test=NAME-4406
+skip-test=NAME-4408
+skip-test=NETW-2400
+skip-test=NETW-2600
+skip-test=NETW-2704
+skip-test=NETW-2705
+skip-test=NETW-2706
+skip-test=NETW-3001
+skip-test=NETW-3004
+skip-test=NETW-3006
+skip-test=NETW-3008
+skip-test=NETW-3012
+skip-test=NETW-3014
+skip-test=NETW-3015
+skip-test=NETW-3028
+skip-test=NETW-3030
+skip-test=NETW-3032
+skip-test=NETW-3200
+skip-test=PHP-2211
+skip-test=PHP-2320
+skip-test=PHP-2368
+skip-test=PHP-2372
+skip-test=PHP-2374
+skip-test=PHP-2376
+skip-test=PHP-2378
+skip-test=PHP-2379
+skip-test=PHP-2382
+skip-test=PKGS-7200
+skip-test=PKGS-7301
+skip-test=PKGS-7302
+skip-test=PKGS-7303
+skip-test=PKGS-7304
+skip-test=PKGS-7306
+skip-test=PKGS-7308
+skip-test=PKGS-7310
+skip-test=PKGS-7312
+skip-test=PKGS-7314
+skip-test=PKGS-7320
+skip-test=PKGS-7322
+skip-test=PKGS-7328
+skip-test=PKGS-7330
+skip-test=PKGS-7332
+skip-test=PKGS-7334
+skip-test=PKGS-7345
+skip-test=PKGS-7346
+skip-test=PKGS-7348
+skip-test=PKGS-7350
+skip-test=PKGS-7352
+skip-test=PKGS-7354
+skip-test=PKGS-7366
+skip-test=PKGS-7370
+skip-test=PKGS-7378
+skip-test=PKGS-7380
+skip-test=PKGS-7381
+skip-test=PKGS-7382
+skip-test=PKGS-7383
+skip-test=PKGS-7384
+skip-test=PKGS-7386
+skip-test=PKGS-7387
+skip-test=PKGS-7388
+skip-test=PKGS-7390
+skip-test=PKGS-7392
+skip-test=PKGS-7393
+skip-test=PKGS-7394
+skip-test=PKGS-7395
+skip-test=PKGS-7398
+skip-test=PKGS-7410
+skip-test=PKGS-7420
+skip-test=PRNT-2302
+skip-test=PRNT-2304
+skip-test=PRNT-2306
+skip-test=PRNT-2307
+skip-test=PRNT-2308
+skip-test=PRNT-2314
+skip-test=PRNT-2316
+skip-test=PRNT-2418
+skip-test=PRNT-2420
+skip-test=PROC-3602
+skip-test=PROC-3604
+skip-test=PROC-3612
+skip-test=PROC-3614
+skip-test=PROC-3802
+skip-test=RBAC-6272
+skip-test=SCHD-7702
+skip-test=SCHD-7704
+skip-test=SCHD-7718
+skip-test=SCHD-7720
+skip-test=SCHD-7724
+skip-test=SHLL-6202
+skip-test=SHLL-6211
+skip-test=SHLL-6220
+skip-test=SHLL-6230
+skip-test=SINT-7010
+skip-test=SNMP-3302
+skip-test=SNMP-3304
+skip-test=SNMP-3306
+skip-test=SQD-3602
+skip-test=SQD-3604
+skip-test=SQD-3606
+skip-test=SQD-3610
+skip-test=SQD-3613
+skip-test=SQD-3614
+skip-test=SQD-3616
+skip-test=SQD-3620
+skip-test=SQD-3624
+skip-test=SQD-3630
+skip-test=SQD-3680
+skip-test=SSH-7402
+skip-test=SSH-7404
+skip-test=SSH-7406
+skip-test=SSH-7408
+skip-test=SSH-7440
+skip-test=STRG-1846
+skip-test=STRG-1902
+skip-test=STRG-1904
+skip-test=STRG-1906
+skip-test=STRG-1920
+skip-test=STRG-1926
+skip-test=STRG-1928
+skip-test=STRG-1930
+skip-test=TIME-3104
+skip-test=TIME-3106
+skip-test=TIME-3112
+skip-test=TIME-3116
+skip-test=TIME-3120
+skip-test=TIME-3124
+skip-test=TIME-3128
+skip-test=TIME-3132
+skip-test=TIME-3136
+skip-test=TIME-3148
+skip-test=TIME-3160
+skip-test=TIME-3170
+skip-test=TIME-3180
+skip-test=TIME-3181
+skip-test=TIME-3182
+skip-test=TIME-3185
+skip-test=TOOL-5002
+skip-test=TOOL-5102
+skip-test=TOOL-5104
+skip-test=TOOL-5120
+skip-test=TOOL-5122
+skip-test=TOOL-5130
+skip-test=TOOL-5160
+skip-test=TOOL-5190
+skip-test=USB-1000
+skip-test=USB-2000
+skip-test=USB-3000
+
+
+#################################################################################
+#
+# Kernel options
+# ---------------
+# config-data=, followed by:
+#
+# - Type                     = Set to 'sysctl'
+# - Setting                  = value of sysctl key (e.g. kernel.sysrq)
+# - Expected value           = Preferred value for key (e.g. 0)
+# - Hardening Points         = Number of hardening points (typically 1 point per key) (1)
+# - Description              = Textual description about the sysctl key(Disable magic SysRQ)
+# - Related file or command  = For example, sysctl -a to retrieve more details
+# - Solution field           = Specifies more details or where to find them (url:URL, text:TEXT, or -)
+#
+#################################################################################
+
+# Config
+# - Type (sysctl)
+# - Setting (kernel.sysrq)
+# - Expected value (0)
+# - Hardening Points (1)
+# - Description (Disable magic SysRQ)
+# - Related file or command (sysctl -a)
+# - Solution field (url:URL, text:TEXT, or -)
+
+# Processes
+config-data=sysctl;security.bsd.see_other_gids;0;1;Groups only see their own processes;sysctl -a;-;category:security;
+config-data=sysctl;security.bsd.see_other_uids;0;1;Users only see their own processes;sysctl -a;-;category:security;
+config-data=sysctl;security.bsd.stack_guard_page;1;1;Enable stack smashing protection (SSP)/ProPolice to defend against possible buffer overflows;-;category:security;
+config-data=sysctl;security.bsd.unprivileged_proc_debug;0;1;Unprivileged processes can not use process debugging;sysctl -a;-;category:security;
+config-data=sysctl;security.bsd.unprivileged_read_msgbuf;0;1;Unprivileged processes can not read the kernel message buffer;sysctl -a;-;category:security;
+
+# Kernel
+config-data=sysctl;fs.suid_dumpable;0;1;Restrict core dumps;sysctl -a;url:https;//www.kernel.org/doc/Documentation/sysctl/fs.txt;category:security;
+config-data=sysctl;fs.protected_fifos;2;1;Restrict FIFO special device creation behavior;sysctl -a;url:https;//www.kernel.org/doc/Documentation/sysctl/fs.txt;category:security;
+config-data=sysctl;fs.protected_hardlinks;1;1;Restrict hardlink creation behavior;sysctl -a;url:https;//www.kernel.org/doc/Documentation/sysctl/fs.txt;category:security;
+config-data=sysctl;fs.protected_regular;2;1;Restrict regular files creation behavior;sysctl -a;url:https;//www.kernel.org/doc/Documentation/sysctl/fs.txt;category:security;
+config-data=sysctl;fs.protected_symlinks;1;1;Restrict symlink following behavior;sysctl -a;url:https;//www.kernel.org/doc/Documentation/sysctl/fs.txt;category:security;
+#config-data=sysctl;kern.randompid=2345;Randomize PID numbers with a specific modulus;sysctl -a;-;category:security;
+config-data=sysctl;kern.sugid_coredump;0;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.core_setuid_ok;0;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.core_uses_pid;1;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.ctrl-alt-del;0;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.dmesg_restrict;1;1;Restrict use of dmesg;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.exec-shield-randomize;1;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.exec-shield;1;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.kptr_restrict;2;1;Restrict access to kernel symbols;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.maps_protect;1;1;Restrict access to /proc/[pid]/maps;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.modules_disabled;1;1;Restrict module loading once this sysctl value is loaded;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.perf_event_paranoid;3;1;Restrict unprivileged access to the perf_event_open() system call.;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.randomize_va_space;2;1;Randomize of memory address locations (ASLR);sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.suid_dumpable;0;1;Restrict core dumps;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.sysrq;0;1;Disable magic SysRQ;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.unprivileged_bpf_disabled;1;1;Restrict BPF for unprivileged users;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.use-nx;0;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.yama.ptrace_scope;1|2|3;1;Disable process tracing for everyone;-;category:security;
+
+# Network
+config-data=sysctl;net.core.bpf_jit_harden;2;1;Hardened BPF JIT compilation;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;net.inet.ip.linklocal.in.allowbadttl;0;
+config-data=sysctl;net.inet.tcp.always_keepalive;0;1;Disable TCP keep alive detection for dead peers as the keepalive can be spoofed;-;category:security;
+#config-data=sysctl;net.inet.tcp.fast_finwait2_recycle;1;1;Recycle FIN/WAIT states more quickly (DoS mitigation step, with risk of false RST);-;category:security;
+config-data=sysctl;net.inet.tcp.nolocaltimewait;1;1;Remove the TIME_WAIT state for loopback interface;-;category:security;
+config-data=sysctl;net.inet.tcp.path_mtu_discovery;0;1;Disable MTU discovery as many hosts drop the ICMP type 3 packets;-;category:security;
+config-data=sysctl;net.inet.icmp.bmcastecho;0;1;Ignore ICMP packets directed to broadcast address;-;category:security;
+config-data=sysctl;net.inet.tcp.icmp_may_rst;0;1;ICMP may not send RST to avoid spoofed ICMP/UDP floods;-;category:security;
+config-data=sysctl;net.inet.icmp.drop_redirect;1;1;Do not allow redirected ICMP packets;-;category:security;
+config-data=sysctl;net.inet.icmp.rediraccept;0;1;Disable incoming ICMP redirect routing redirects;-;category:security;
+config-data=sysctl;net.inet.icmp.timestamp;0;1;Disable timestamps;-;category:security;
+config-data=sysctl;net.inet.ip.accept_sourceroute;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.inet.ip.check_interface;1;1;Verify that a packet arrived on the right interface;-;category:security;
+config-data=sysctl;net.inet.ip.forwarding;0;1;Do not allow forwarding of traffic;-;category:security;
+config-data=sysctl;net.inet.ip.process_options;0;1;Ignore any IP options in the incoming packets;-;category:security;
+config-data=sysctl;net.inet.ip.random_id;1;1;Use a random IP id to each packet leaving the system;-;category:security;
+config-data=sysctl;net.inet.ip.redirect;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.inet.ip.sourceroute;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.inet.ip6.redirect;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.inet.tcp.blackhole;2;1;Do not sent RST but drop traffic when delivered to closed TCP port;-;category:security;
+config-data=sysctl;net.inet.tcp.drop_synfin;1;1;SYN/FIN packets will be dropped on initial connection;-;category:security;
+config-data=sysctl;net.inet.udp.blackhole;1;1;Do not sent RST but drop traffic when delivered to closed UDP port;-;category:security;
+config-data=sysctl;net.inet6.icmp6.rediraccept;0;1;Disable incoming ICMP redirect routing redirects;-;category:security;
+config-data=sysctl;net.inet6.ip6.forwarding;0;1;Do not allow forwarding of traffic;-;category:security;
+config-data=sysctl;net.inet6.ip6.fw.enable;1;1;Enable filtering;-;category:security;
+config-data=sysctl;net.inet6.ip6.redirect;0;1;Disable sending ICMP redirect routing redirects;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.accept_redirects;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.accept_source_route;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.bootp_relay;0;1;Do not relay BOOTP packets;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.forwarding;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.log_martians;1;1;Log all packages for which the host does not have a path back to the source;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.mc_forwarding;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.proxy_arp;0;1;Do not relay ARP packets;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.rp_filter;1;1;Enforce ingress/egress filtering for packets;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.send_redirects;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.ipv4.conf.default.accept_redirects;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.ipv4.conf.default.accept_source_route;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.ipv4.conf.default.log_martians;1;1;Log all packages for which the host does not have a path back to the source;-;category:security;
+config-data=sysctl;net.ipv4.icmp_echo_ignore_broadcasts;1;1;Ignore ICMP packets directed to broadcast address;-;category:security;
+config-data=sysctl;net.ipv4.icmp_ignore_bogus_error_responses;1;1;Ignore-;category:security;
+#config-data=sysctl;net.ipv4.ip_forward;0;1;Do not forward traffic;-;category:security;
+config-data=sysctl;net.ipv4.tcp_syncookies;1;1;Use SYN cookies to prevent SYN attack;-;category:security;
+config-data=sysctl;net.ipv4.tcp_timestamps;0|1;1;Disable TCP time stamps or enable them with different offsets;-;category:security;
+config-data=sysctl;net.ipv6.conf.all.send_redirects;0;1;Disable/ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.ipv6.conf.all.accept_redirects;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.ipv6.conf.all.accept_source_route;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.ipv6.conf.default.accept_redirects;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.ipv6.conf.default.accept_source_route;0;1;Disable IP source routing;-;category:security;
+
+# Other
+config-data=sysctl;dev.tty.ldisc_autoload;0;1;Disable loading of TTY line disciplines;-;category:security;
+config-data=sysctl;hw.kbd.keymap_restrict_change;4;1;Disable changing the keymap by non-privileged users;-;category:security;
+#sysctl;kern.securelevel;1^2^3;1;FreeBSD security level;
+#security.jail.jailed; 0
+#security.jail.jail_max_af_ips; 255
+#security.jail.mount_allowed; 0
+#security.jail.chflags_allowed; 0
+#security.jail.allow_raw_sockets; 0
+#security.jail.enforce_statfs; 2
+#security.jail.sysvipc_allowed; 0
+#security.jail.socket_unixiproute_only; 1
+#security.jail.set_hostname_allowed; 1
+#security.bsd.suser_enabled; 1
+#security.bsd.unprivileged_proc_debug; 1
+#security.bsd.conservative_signals; 1
+#security.bsd.unprivileged_read_msgbuf; 1
+#security.bsd.unprivileged_get_quota; 0
+config-data=sysctl;security.bsd.hardlink_check_gid;1;1;Unprivileged processes are not allowed to create hard links to files which are owned by other groups;-;category:security;
+config-data=sysctl;security.bsd.hardlink_check_uid;1;1;Unprivileged processes are not allowed to create hard links to files which are owned by other users;-;category:security;
+
+
+#################################################################################
+#
+# permfile
+# ---------------
+# permfile=file name:file permissions:owner:group:action:
+# Action = NOTICE or WARN
+# Examples:
+# permfile=/etc/test1.dat:600:root:wheel:NOTICE:
+# permfile=/etc/test1.dat:640:root:-:WARN:
+#
+#################################################################################
+
+#permfile=/etc/inetd.conf:rw-------:root:-:WARN:
+#permfile=/etc/fstab:rw-r--r--:root:-:WARN:
+permfile=/boot/grub/grub.cfg:rw-------:root:root:WARN:
+permfile=/boot/grub2/grub.cfg:rw-------:root:root:WARN:
+permfile=/boot/grub2/user.cfg:rw-------:root:root:WARN:
+permfile=/etc/at.allow:rw-------:root:-:WARN:
+permfile=/etc/at.deny:rw-------:root:-:WARN:
+permfile=/etc/cron.allow:rw-------:root:-:WARN:
+permfile=/etc/cron.deny:rw-------:root:-:WARN:
+permfile=/etc/crontab:rw-------:root:-:WARN:
+permfile=/etc/group:rw-r--r--:root:-:WARN:
+permfile=/etc/group-:rw-r--r--:root:-:WARN:
+permfile=/etc/hosts.allow:rw-r--r--:root:root:WARN:
+permfile=/etc/hosts.deny:rw-r--r--:root:root:WARN:
+permfile=/etc/issue:rw-r--r--:root:root:WARN:
+permfile=/etc/issue.net:rw-r--r--:root:root:WARN:
+permfile=/etc/lilo.conf:rw-------:root:-:WARN:
+permfile=/etc/motd:rw-r--r--:root:root:WARN:
+permfile=/etc/passwd:rw-r--r--:root:-:WARN:
+permfile=/etc/passwd-:rw-r--r--:root:-:WARN:
+permfile=/etc/sshd_internal_config:rw-r--r--:root:-:WARN:
+permfile=/etc/hosts.equiv:rw-r--r--:root:root:WARN:
+permfile=/etc/shosts.equiv:rw-r--r--:root:root:WARN:
+permfile=/root/.rhosts:rw-------:root:root:WARN:
+permfile=/root/.rlogin:rw-------:root:root:WARN:
+permfile=/root/.shosts:rw-------:root:root:WARN:
+
+# These permissions differ by OS
+#permfile=/etc/gshadow:---------:root:-:WARN:
+#permfile=/etc/gshadow-:---------:root:-:WARN:
+#permfile=/etc/shadow:---------:root:-:WARN:
+#permfile=/etc/shadow-:---------:root:-:WARN:
+
+
+#################################################################################
+#
+# permdir
+# ---------------
+# permdir=directory name:file permissions:owner:group:action when permissions are different:
+#
+#################################################################################
+
+permdir=/root/.ssh:rwx------:root:-:WARN:
+permdir=/etc/cron.d:rwx------:root:root:WARN:
+permdir=/etc/cron.daily:rwx------:root:root:WARN:
+permdir=/etc/cron.hourly:rwx------:root:root:WARN:
+permdir=/etc/cron.weekly:rwx------:root:root:WARN:
+permdir=/etc/cron.monthly:rwx------:root:root:WARN:
+
+
+# Ignore some specific home directories
+# One directory per line; directories will be skipped for home directory specific
+# checks, like file permissions, SSH and other configuration files
+#ignore-home-dir=/home/user
+
+
+# Allow promiscuous interfaces
+#   <option>:<promiscuous interface name>:<description>:
+#if_promisc:pflog0:pf log daemon interface:
+
+
+# The URL prefix and append to the URL for controls or your custom tests
+# Link will be formed as {control-url-protocol}://{control-url-prepend}CONTROL-ID{control-url-append}
+#control-url-protocol=https
+#control-url-prepend=cisofy.com/control/
+#control-url-append=/
+
+# The URL prefix and append to URL's for your custom tests
+#custom-url-protocol=https
+#custom-url-prepend=your-domain.example.org/control-info/
+#custom-url-append=/
+
+
+#################################################################################
+#
+# Operating system specific
+# -------------------------
+#
+#################################################################################
+
+# Skip the FreeBSD portaudit test
+#freebsd-skip-portaudit=yes
+
+# Skip security repository check for Debian based systems
+#debian-skip-security-repository=yes
+
+
+
+
+debug=yes
+developer-mode=yes
+strict=yes
+verbose=yes
+
+
+
+#EOF

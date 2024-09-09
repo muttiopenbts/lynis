@@ -1,0 +1,67 @@
+#!/bin/sh
+
+#########################################################################
+#
+#    * DO NOT REMOVE *
+#-----------------------------------------------------
+# PLUGIN_AUTHOR=Junos Admin
+# PLUGIN_CATEGORY=BINS
+# PLUGIN_DATE=2024-09-03
+# PLUGIN_DESC=A test to find all binary file libs
+# PLUGIN_NAME=check_all_binary_libs
+# PLUGIN_REQUIRED_TESTS=check_all_binaries
+# PLUGIN_PACKAGE=
+# PLUGIN_VERSION=0.1.0
+#-----------------------------------------------------
+#
+#########################################################################
+
+get_all_bin_libs() {
+    # define some constant
+    IFS_OLD=$IFS
+    IFS=$'\n'
+    LDDBIN='ldd' # TODO: make global from functions
+    #start
+    LogText "Test: Obtain path and lib file name for all binary libs"
+    bin_file_libs=${BIN_FILES}
+
+    for each_file in ${bin_files};
+    do
+        display_str=$(${LDDBIN} ${each_file} | ${AWKBINARY}  -F' ' '/^\t/ { printf("%s %s\n", "'${each_file}'", $3) }')
+        if [ "${display_str}" != '' ]; then
+            Report "bin_file_libs[]=$display_str"
+        fi
+    done
+    IFS=$IFS_OLD
+}
+
+#########################################################################
+#
+    # Add custom section to screen output
+    InsertSection "BINARIES"
+#
+#################################################################################
+#
+    # Test        : BINS-0003
+    # Description : We show some lines on the screen
+    # BIN_FILES must have been populated in other test.
+    if [ "${BIN_FILES:-''}" != '' ]; then PREQS_MET="YES"; else PREQS_MET="NO"; fi
+    # We consider it to be a lightweight test (no heavy IO, or long searches), no network connection needed
+    Register --test-no BINS-0003 --preqs-met ${PREQS_MET} --weight L --network NO --description "A test to list binary file libs"
+    if [ ${SKIPTEST} -eq 0 ]; then
+        # The Display function makes it easy to show something on screen, with colors.
+        # --indent  defines amount of spaces
+        # --text    text to be displayed on screen
+        # --result  text at end of line
+        # --color   color of result text
+        Display --indent 2 --text "- Finding binary file libs" --result OK --color GREEN
+        get_all_bin_libs;
+    fi
+#
+#################################################################################
+#
+
+# Wait for keypress (unless --quick is being used)
+WaitForKeyPress
+
+#EOF

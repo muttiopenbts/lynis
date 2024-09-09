@@ -187,7 +187,7 @@
 #
     # Test        : CRYP-7931
     # Description : Determine if system uses encrypted swap
-    if [ -e "${SWAPONBINARY}" -a -e "${CRYPTSETUPBINARY}" ]; then PREQS_MET="YES"; else PREQS_MET="NO"; fi
+    if [ -e "${SWAPONBINARY:-}" -a -e "${CRYPTSETUPBINARY}" ]; then PREQS_MET="YES"; else PREQS_MET="NO"; fi
     Register --test-no CRYP-7931 --preqs-met ${PREQS_MET} --os Linux --weight L --network NO --root-only YES --category security --description "Determine if system uses encrypted swap"
     if [ ${SKIPTEST} -eq 0 ]; then
         ENCRYPTED_SWAPS=0

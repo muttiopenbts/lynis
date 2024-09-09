@@ -312,7 +312,12 @@
                 fi
             ;;
             DragonFly|FreeBSD|macOS|NetBSD)
-                FIND=$(${IFCONFIGBINARY} -l 2> /dev/null)
+                # Add variation for Juniper's ifconfig shipped FreeBSD
+                if [ $(echo "$OS_VERSION" | ${GREPBINARY} 'JNPR') ];then
+                    FIND=$(${IFCONFIGBINARY} -a 2> /dev/null |${AWKBINARY} -F ':' '/^[a-z.-A-Z0-9]+/ {print $1}')
+                else
+                    FIND=$(${IFCONFIGBINARY} -l 2> /dev/null)
+                fi
             ;;
             OpenBSD|Solaris)
                 FIND=$(${IFCONFIGBINARY} -a 2> /dev/null | ${GREPBINARY} "flags=" | ${AWKBINARY} -F ": " '{ print  $1 }')
@@ -399,8 +404,13 @@
                 FIND2=$(${IFCONFIGBINARY} -a 2> /dev/null | ${AWKBINARY} '{ if ($1=="inet6") print $2 }')
                 ;;
             DragonFly|FreeBSD|NetBSD)
-                FIND=$(${IFCONFIGBINARY} -a 2> /dev/null | ${AWKBINARY} '{ if ($1=="inet") print $2 }')
-                FIND2=$(${IFCONFIGBINARY} -a 2> /dev/null | ${AWKBINARY} '{ if ($1=="inet6") print $2 }')
+                # Add variation for Juniper's ifconfig shipped FreeBSD
+                if [ $(echo "$OS_VERSION" | ${GREPBINARY} 'JNPR') ];then
+                    FIND=$(${IFCONFIGBINARY} -a 2> /dev/null | ${GREPBINARY} 'inet '| ${AWKBINARY} -F '=' '/local/ {print $2}'|${CUTBINARY} -d ' ' -f 1)
+                else
+                    FIND=$(${IFCONFIGBINARY} -a 2> /dev/null | ${AWKBINARY} '{ if ($1=="inet") print $2 }')
+                    FIND2=$(${IFCONFIGBINARY} -a 2> /dev/null | ${AWKBINARY} '{ if ($1=="inet6") print $2 }')
+                fi
                 ;;
             Linux)
                 if [ -n "${IFCONFIGBINARY}" ]; then
@@ -458,7 +468,7 @@
         COUNT=0
         case ${OS} in
             DragonFly | FreeBSD)
-                if [ -n "${SOCKSTATBINARY}" ]; then
+                if [ -n "${SOCKSTATBINARY:=''}" ]; then
                     FIND=$(${SOCKSTATBINARY} | ${AWKBINARY} '{ if ($7 ~ /\*:\*/) print $5"|"$6"|"$2"|" }' | ${SORTBINARY} -u)
                     # To strip off IP's: ${SEDBINARY} 's/|.*:/|/'
                 else
@@ -482,10 +492,11 @@
             ;;
 
             macOS)
-                if [ -n "${LSOFBINARY}" ]; then
+                if [ -n "${LSOFBINARY}" ] && [ -n "${IP:-}" ]; then
+                    # TODO: $IP doesn't appear to be set and only used for macos
                     LogText "Test: Retrieving lsof information to find listening ports"
                     # UDP and TCP combined
-                    FIND=$(${LSOFBINARY}${LSOF_EXTRA_OPTIONS} -i -P | ${AWKBINARY} '{ print $9"|"$8"|"$1"|" }' | ${SEDBINARY} 's/\(.*\)\-\>.*\(\|.*\)/\1\2/' | ${SEDBINARY} 's/\*/'$IP'/' | ${SORTBINARY} -u | ${GREPBINARY} -v "NAME")
+                    FIND=$(${LSOFBINARY}${LSOF_EXTRA_OPTIONS} -i -P | ${AWKBINARY} '{ print $9"|"$8"|"$1"|" }' | ${SEDBINARY} 's/\(.*\)\-\>.*\(\|.*\)/\1\2/' | ${SEDBINARY} 's/\*/'${IP}'/' | ${SORTBINARY} -u | ${GREPBINARY} -v "NAME")
                 else
                     FIND=""
                 fi

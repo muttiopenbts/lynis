@@ -1583,6 +1583,10 @@
             shift  # Go to next parameter
         done
 
+        # Some test cases were failing because users variable unset
+        # TODO: Delete below line. Useless.
+        users=${users:=''}
+
         if [ -z "${search}" ]; then ExitFatal "Missing process to search for when using IsRunning function"; fi
         RUNNING=0
         if [ -x "${PGREPBINARY}" ] && [ "${OS}" != "AIX" ]; then
@@ -1609,6 +1613,7 @@
                 LogText "Performing simple ps scan (busybox)"
                 PSOPTIONS=" -o args="
                 FIND=$(${PSBINARY:-ps} ${PSOPTIONS} | ${GREPBINARY:-grep} -E "( |/)${search}" | ${GREPBINARY:-grep} -v "grep")
+                # FIND=$(${PSBINARY:-ps} ${PSOPTIONS} | ${EGREPBINARY:-egrep} "( |/)${search}" | ${GREPBINARY:-grep} -v "grep")
             else
                 if [ -n "${users}" ]; then
                     for u in ${users}; do
@@ -2762,6 +2767,7 @@
             if [ ${SKIPLOGTEST} -eq 0 ]; then LogText "Reason to skip: ${SKIPREASON}"; fi
             TESTS_SKIPPED="${TEST_NO}|${TESTS_SKIPPED}"
         fi
+        # TODO: mk. unset SKIPREASON
 
         # Save timestamp for next time the Register function is called
         PREVIOUS_TEST="${TEST_NO}"
