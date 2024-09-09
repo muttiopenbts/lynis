@@ -105,6 +105,7 @@ plugin=check_all_binaries
 plugin=check_0_all_sharedlibs
 plugin=check_all_binary_libs
 plugin=check_all_sharedlib_libs
+plugin=check_all_sh_scripts
 
 disable-plugin=authentication
 disable-plugin=compliance
@@ -574,6 +575,7 @@ skip-test=TOOL-5190
 skip-test=USB-1000
 skip-test=USB-2000
 skip-test=USB-3000
+skip-test=KRB-1000
 
 
 #################################################################################

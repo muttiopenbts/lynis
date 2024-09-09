@@ -113,6 +113,14 @@
                 OS_NAME="TrueOS"
                 LogText "Result: found TrueOS file, system is completely based on FreeBSD though. Only adjusting OS name."
             fi
+
+            # Junos
+            if [ ! -z "$(uname -i | grep 'JNPR')" ]; then
+                HOMEDIRS="/var/home /root"
+                OS_FULLNAME="Junos ${OS_FULLNAME}"
+                LogText "Result: Additionally found Junos, system is based on FreeBSD though."
+            fi
+
         ;;
 
         # HP-UX
