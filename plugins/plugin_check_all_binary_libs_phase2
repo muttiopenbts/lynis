@@ -18,6 +18,7 @@
 
 get_all_bin_libs() {
     # define some constant
+    NEWLINE=$'\n'
     IFS_OLD=$IFS
     IFS=$'\n'
     LDDBIN='ldd' # TODO: make global from functions
@@ -27,9 +28,9 @@ get_all_bin_libs() {
 
     for each_file in ${bin_files};
     do
-        display_str=$(${LDDBIN} ${each_file} | ${AWKBINARY}  -F' ' '/^\t/ { printf("%s %s\n", "'${each_file}'", $3) }')
+        display_str=$(${LDDBIN} ${each_file} 2>/dev/null | ${GREPBINARY} '=>' | ${AWKBINARY} -F' ' '/^\t/ { FILE=$3; CMD="realpath " FILE " 2>/dev/null | xargs ls -la"; CMD|getline RESULT; printf("%s\n", RESULT)}')
         if [ "${display_str}" != '' ]; then
-            Report "bin_file_libs[]=$display_str"
+            Report "bin_file_libs[]=${each_file}${NEWLINE}${display_str}"
         fi
     done
     IFS=$IFS_OLD

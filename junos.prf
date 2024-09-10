@@ -128,7 +128,7 @@ disable-plugin=processes
 disable-plugin=security-modules
 disable-plugin=system-integrity
 disable-plugin=systemd
-disable-plugin=users
+# disable-plugin=users
 disable-plugin=krb5
 
 skip-test=ACCT-2754

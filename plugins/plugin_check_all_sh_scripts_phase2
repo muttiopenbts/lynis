@@ -23,10 +23,12 @@ get_all_sh_scripts() {
     # define some constant
     IFS_OLD=$IFS
     IFS=$'\n' 
+    PROC_PATH=
+    JUNOS_PROC_PATH=
     #start
     LogText "Test: Obtain all shell scripts"
-    script_files=$(${FINDBINARY} / -not -path '/proc/*' -type f -exec ${GREPBINARY} -Iq . {} \; -exec ${HEADBINARY} -1 {} /dev/null \; | ${AWKBINARY} '/sh/ { print file } { file = $0 } ' | ${CUTBINARY} -d' ' -f2 | ${GREPBINARY} -v '/dev/null' | ${XARGSBINARY} -I {} ${FILEBINARY} {} | ${GREPBINARY} script)
-    SCRIPT_FILES="${libbin_files}"
+    script_files=$(${FINDBINARY} / -not -path '/proc/*' -not -path '/junosproc/*' -type f -exec ${GREPBINARY} -Iq . {} \; -exec ${HEADBINARY} -1 {} /dev/null \; | ${AWKBINARY} '/sh/ { print file } { file = $0 } ' | ${CUTBINARY} -d' ' -f2 | ${GREPBINARY} -v '/dev/null' | ${XARGSBINARY} -I {} ${FILEBINARY} {} | ${GREPBINARY} script | ${CUTBINARY} -d':' -f1)
+    SCRIPT_FILES="${script_files}"
     count=$(echo -e "${script_files}" | wc -l) 
 
     Report "script_files_count[]=$count"
