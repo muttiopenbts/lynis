@@ -6,8 +6,8 @@
 #-----------------------------------------------------
 # PLUGIN_AUTHOR=Junos Admin
 # PLUGIN_CATEGORY=SUID
-# PLUGIN_DATE=2024-09-03
-# PLUGIN_DESC=A test for find suid file
+# PLUGIN_DATE=2024-09-11
+# PLUGIN_DESC=A test for find suid or sgid files
 # PLUGIN_NAME=check_suid_file
 # PLUGIN_REQUIRED_TESTS=
 # PLUGIN_PACKAGE=
@@ -22,7 +22,7 @@ check_suid_file() {
     IFS=$'\n' 
     #start
     LogText "Test: Obtain suid file name"
-    suid_files=$(find / -perm 2000 -o -perm -4000 -type f -exec ls -la {} 2>/dev/null \;)
+    suid_files=$(find / -perm -4000 -type f -exec ls -la {} 2>/dev/null \;)
     for each_file in ${suid_files};
     do
         Report "suid_file[]=$each_file"
@@ -30,23 +30,40 @@ check_suid_file() {
     IFS=$IFS_OLD
 }
 
-check_guid_file() {
+check_suid_or_guid_file() {
+    # TODO: Investigate why 'or' operator causes unexpected results. 
+    # Purpose is to find file with either suid or sgid permissions.
     # define some constant
     IFS_OLD=$IFS
     IFS=$'\n' 
     #start
-    LogText "Test:obtain guid file name"
-    guid_files=$(find / -perm 2000 -o -perm -4000 -type f -exec ls -la {} 2>/dev/null \;)
+    LogText "Test: Obtain suid or guid files"
+    suid_files=$(find / -perm -2000 -o -perm -4000 -type f -exec ls -la {} 2>/dev/null \;)
+    for each_file in ${suid_files};
+    do
+        Report "suid_guid_file[]=$each_file"
+    done
+    IFS=$IFS_OLD
+}
+
+
+check_sgid_file() {
+    # define some constant
+    IFS_OLD=$IFS
+    IFS=$'\n' 
+    #start
+    LogText "Test:obtain sgid file names"
+    guid_files=$(find / -perm -2000 -type f -exec ls -la {} 2>/dev/null \;)
     for each_file in ${guid_files};
     do
-        Report "guid_file[]=$each_file"
+        Report "sgid_file[]=$each_file"
     done
     IFS=$IFS_OLD
 }
 #########################################################################
 #
     # Add custom section to screen output
-    InsertSection "SUID"
+    InsertSection "SUID|SGID"
 #
 #################################################################################
 #
@@ -55,21 +72,34 @@ check_guid_file() {
 
     # Register our first custom test
     # We consider it to be a lightweight test (no heavy IO, or long searches), no network connection needed
-    Register --test-no SUID-0001 --weight L --network NO --description "A test for find suid file"
+    Register --test-no SUID-0001 --weight L --network NO --description "A test for find suid files"
     if [ ${SKIPTEST} -eq 0 ]; then
         # The Display function makes it easy to show something on screen, with colors.
         # --indent  defines amount of spaces
         # --text    text to be displayed on screen
         # --result  text at end of line
         # --color   color of result text
-        Display --indent 2 --text "- Finding hidden file" --result OK --color GREEN
+        Display --indent 2 --text "- Finding suid files" --result OK --color GREEN
         check_suid_file;
     fi
 #
-#################################################################################
 #
+    # Test        : SGID-0001
+    # Description : We show some lines on the screen
 
-# Wait for keypress (unless --quick is being used)
-WaitForKeyPress
+    # Register our first custom test
+    # We consider it to be a lightweight test (no heavy IO, or long searches), no network connection needed
+    Register --test-no SGID-0001 --weight L --network NO --description "A test for find sgid files"
+    if [ ${SKIPTEST} -eq 0 ]; then
+        # The Display function makes it easy to show something on screen, with colors.
+        # --indent  defines amount of spaces
+        # --text    text to be displayed on screen
+        # --result  text at end of line
+        # --color   color of result text
+        Display --indent 2 --text "- Finding sgid files" --result OK --color GREEN
+        check_sgid_file;
+    fi
+#
+#################################################################################
 
 #EOF
