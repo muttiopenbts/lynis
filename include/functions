@@ -1638,8 +1638,19 @@
                         ;;
                     esac
                     if [ ${PARTIAL_SEARCH} -eq 1 ]; then
-                        LogText "Performing ps scan using partial match and without uid"
-                        FIND=$(${PSBINARY:-ps} ${PSOPTIONS} | ${AWKBINARY:-awk} -v pattern="${search}" '$0 ~ pattern {print}')
+                        case "${OS_FULLNAME}" in
+                            *"Junos"*) 
+                                # TODO: Verify if this condition should be looking into OS FullName=Junos
+                                # Grep to filter out results containg awk
+                                PSOPTIONS="aux"
+                                LogText "Performing ps scan using partial match and without uid for Junos OS"
+                                FIND=$(${PSBINARY:-ps} ${PSOPTIONS} | ${GREPBINARY} --invert-match 'grep' | ${GREPBINARY} "${search}")
+                            ;;
+                            *)
+                                LogText "Performing ps scan using partial match and without uid"
+                                FIND=$(${PSBINARY:-ps} ${PSOPTIONS} | ${AWKBINARY:-awk} -v pattern="${search}" '$0 ~ pattern {print}')
+                            ;;                        
+                        esac
                     else
                         LogText "Performing ps scan using exact match and without uid"
                         FIND=$(${PSBINARY:-ps} ${PSOPTIONS} | ${AWKBINARY:-awk} -v pattern="^${search}$" '$0 ~ pattern {print}')
