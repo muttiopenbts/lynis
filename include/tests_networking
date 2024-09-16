@@ -346,11 +346,18 @@
     if [ ${SKIPTEST} -eq 0 ]; then
         FIND=""
         case ${OS} in
-            AIX)
+            AIX)    
                 FIND=$(lscfg -vl ent* | ${GREPBINARY} "Network Address" | ${CUTBINARY} -d"." -f14 | ${AWKBINARY} '{ ctr=1; i=1; while (ctr <= 6) { d[ctr++]=substr($0,i,2);i=i+2 } printf("%s:%s:%s:%s:%s:%s\n",d[1],d[2],d[3],d[4],d[5],d[6]) }')
                 ;;
             DragonFly|FreeBSD)
-                FIND=$(${IFCONFIGBINARY} -a 2> /dev/null | ${AWKBINARY} '{ if ($1=="ether") print $2 }' | ${SORTBINARY} -u)
+                case "${OS_FULLNAME}" in
+                    *"Junos"*) 
+                        FIND=$(${IFCONFIGBINARY} -a 2> /dev/null | grep 'i802' | cut -d ' ' -f 4 | ${SORTBINARY} -u)
+                        ;;
+                    *)
+                        FIND=$(${IFCONFIGBINARY} -a 2> /dev/null | ${AWKBINARY} '{ if ($1=="ether") print $2 }' | ${SORTBINARY} -u)
+                        ;;                        
+                esac
                 ;;
             Linux)
                 if [ -n "${IFCONFIGBINARY}" ]; then
@@ -468,13 +475,15 @@
         COUNT=0
         case ${OS} in
             DragonFly | FreeBSD)
-                if [ -n "${SOCKSTATBINARY:=''}" ]; then
+                if [ ! -z ${SOCKSTATBINARY:-''} ]; then
                     FIND=$(${SOCKSTATBINARY} | ${AWKBINARY} '{ if ($7 ~ /\*:\*/) print $5"|"$6"|"$2"|" }' | ${SORTBINARY} -u)
                     # To strip off IP's: ${SEDBINARY} 's/|.*:/|/'
-                else
-                    FIND=""
+                elif [ ! -z ${NETSTATBINARY:-''} ]; then
+                    # TODO: Further validation for Junos required
+                    LogText "Test: Retrieving netstat information to find listening ports"
+                    FIND=$(${NETSTATBINARY} -nl 2> /dev/null | grep "^tcp" | ${AWKBINARY} '{ if($6=="LISTEN")  print }' | ${AWKBINARY} -F'.' '{print $1"."$2"."$3"."$4" "$5}' | ${AWKBINARY} '{print $1"|"$4"|"$5}')
+                    FIND2=$(${NETSTATBINARY} -nl 2> /dev/null | grep "^udp" | ${AWKBINARY} -F'.' '{print $1"."$2"."$3"."$4" "$5}' | ${AWKBINARY} '{print $1"|"$4"|"$5}')
                 fi
-                FIND2=""
             ;;
             Linux)
                 if [ -n "${SSBINARY}" ]; then

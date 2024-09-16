@@ -1,0 +1,58 @@
+#!/bin/sh
+
+#########################################################################
+#
+#    * DO NOT REMOVE *
+#-----------------------------------------------------
+# PLUGIN_AUTHOR=Junos Admin
+# PLUGIN_CATEGORY=NETWORK
+# PLUGIN_DATE=2024-09-13
+# PLUGIN_DESC=A test to list unix domain sockets
+# PLUGIN_NAME=check_uds
+# PLUGIN_REQUIRED_TESTS=
+# PLUGIN_PACKAGE=
+# PLUGIN_VERSION=0.1.0
+#-----------------------------------------------------
+#
+#########################################################################
+
+check_unix_domain_sockets() {
+    # define some constant
+    IFS_OLD=$IFS
+    IFS=$'\n' 
+    #start
+    LogText "Test: Unix domain sockets"
+    _files=$(${NETSTATBINARY} -a -f unix | ${AWKBINARY} '$0 ~ /\// {print $9}' | ${SORTBINARY} | ${UNIQBINARY} | ${XARGSBINARY} -I '{}' ls -lt '{}')
+    for each_file in ${_files};
+    do
+        Report "unix_domain_socket_file[]=${each_file}"
+    done
+    IFS=$IFS_OLD
+}
+
+#########################################################################
+#
+    # Add custom section to screen output
+    InsertSection "UNIX_DOMAIN_SOCKETS"
+#
+#################################################################################
+#
+    # Test        : NETW-0001
+    # Description : List unix domain sockets
+
+    # Register our first custom test
+    # We consider it to be a lightweight test (no heavy IO, or long searches), no network connection needed
+    Register --test-no NETW-0001 --weight L --network NO --description "A test to list unix domain sockets"
+    if [ ${SKIPTEST} -eq 0 ]; then
+        # The Display function makes it easy to show something on screen, with colors.
+        # --indent  defines amount of spaces
+        # --text    text to be displayed on screen
+        # --result  text at end of line
+        # --color   color of result text
+        Display --indent 2 --text "- Finding unix domain sockets" --result OK --color GREEN
+        check_unix_domain_sockets;
+    fi
+#
+#################################################################################
+
+#EOF
