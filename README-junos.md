@@ -24,5 +24,7 @@ New tests have been added in the form of plugins.
 
   ## TODO
   * Further expand plugins to conduct deeper vulnerability analysis.  
-    *  E.g. (s|g)uid checks for dangerous or poor coding practices. Check out https://gtfobins.github.io/
+    * E.g. s(u|g)id checks for dangerous or poor coding practices. Check out https://gtfobins.github.io/
     * Shell scripts with poor coding practices.
+    * Investigate kernel hardening checks. Check out https://github.com/wravoc/harden-freebsd?tab=readme-ov-file
+    * Improve inetd checks to account for multiple config files

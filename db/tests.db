@@ -195,6 +195,7 @@ HTTP-6716:test:security:webservers::Check for debug mode on error log in nginx:
 HTTP-6720:test:security:webservers::Check Nginx log files:
 INSE-8000:test:security:insecure_services::Installed inetd package:
 INSE-8002:test:security:insecure_services::Status of inet daemon:
+INSE-8003:test:security:insecure_services::Status of inet daemon:
 INSE-8004:test:security:insecure_services::Presence of inetd configuration file:
 INSE-8006:test:security:insecure_services::Check configuration of inetd when it is disabled:
 INSE-8016:test:security:insecure_services::Check for telnet via inetd:

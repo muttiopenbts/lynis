@@ -73,6 +73,25 @@
 #
 #################################################################################
 #
+    # Test        : INSE-8003
+    # Description : Check for inetd status, without package manager
+    if [ ${INETD_PACKAGE_INSTALLED} -eq 0 ]; then PREQS_MET="YES"; else PREQS_MET="NO"; fi
+    Register --test-no INSE-8003 --preqs-met ${PREQS_MET} --weight L --network NO --category security --description "Check for enabled inet daemon"
+    if [ ${SKIPTEST} -eq 0 ]; then
+        # Check running processes
+        LogText "Test: Searching for active inet daemon"
+        if IsRunning "inetd"; then
+            LogText "Result: inetd is running"
+            Display --indent 4 --text "- inetd status" --result "${STATUS_ACTIVE}" --color GREEN
+            INETD_ACTIVE=1
+        else
+            LogText "Result: inetd is NOT running"
+            Display --indent 4 --text "- inetd status" --result "${STATUS_NOT_ACTIVE}" --color GREEN
+        fi
+    fi
+#
+#################################################################################
+#
     # Test        : INSE-8004
     # Description : Check for inetd configuration file (inetd)
     if [ ${INETD_ACTIVE} -eq 1 ]; then PREQS_MET="YES"; else PREQS_MET="NO"; fi
