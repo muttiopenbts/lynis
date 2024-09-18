@@ -68,8 +68,13 @@
     if [ -x ${ROOTDIR}usr/sbin/pkg ]; then PREQS_MET="YES"; else PREQS_MET="NO"; fi
     Register --test-no PKGS-7301 --preqs-met ${PREQS_MET} --weight L --network NO --category security --description "Query FreeBSD pkg"
     if [ ${SKIPTEST} -eq 0 ]; then
-        FIND=$(pkg -N 2>&1; echo $?)
-        if [ "${FIND}" = "0" ]; then
+        if [ ! "$(echo ${OS_FULLNAME} | grep 'Junos')" == ""  ]; then
+            # Looks like Junos
+            # TODO: Why is pkg hardcoded?
+            IFS_OLD=$IFS
+            IFS=$'\n' 
+            SPACKAGES=$(${ROOTDIR}usr/sbin/pkg info)
+
             Display --indent 4 --text "- Searching packages with pkg" --result "${STATUS_FOUND}" --color GREEN
             Report "package_manager[]=pkg"
             PACKAGE_MGR_PKG=1
@@ -77,13 +82,32 @@
             LogText "Test: Querying pkg to get package list"
             Display --indent 6 --text "- Querying pkg for installed packages"
             LogText "Output:"; LogText "-----"
-            SPACKAGES=$(${ROOTDIR}usr/sbin/pkg query %n,%v)
+
             for ITEM in ${SPACKAGES}; do
-                sPKG_NAME=$(echo ${ITEM} | ${CUTBINARY} -d ',' -f1)
-                sPKG_VERSION=$(echo ${ITEM} | ${CUTBINARY} -d ',' -f2)
+                sPKG_NAME=$(echo ${ITEM} | ${AWKBINARY} -F'  --  ' '{print $2}')
+                sPKG_VERSION=$(echo ${ITEM} | ${AWKBINARY} -F'  --  ' '{print $1}')
                 LogText "Installed package: ${sPKG_NAME} (version: ${sPKG_VERSION})"
                 INSTALLED_PACKAGES="${INSTALLED_PACKAGES}|${ITEM}"
             done
+            IFS=$IFS_OLD
+        else
+            FIND=$(pkg -N 2>&1; echo $?)
+            if [ "${FIND}" = "0" ]; then
+                Display --indent 4 --text "- Searching packages with pkg" --result "${STATUS_FOUND}" --color GREEN
+                Report "package_manager[]=pkg"
+                PACKAGE_MGR_PKG=1
+                LogText "Result: Found pkg"
+                LogText "Test: Querying pkg to get package list"
+                Display --indent 6 --text "- Querying pkg for installed packages"
+                LogText "Output:"; LogText "-----"
+
+                for ITEM in ${SPACKAGES}; do
+                    sPKG_NAME=$(echo ${ITEM} | ${CUTBINARY} -d ',' -f1)
+                    sPKG_VERSION=$(echo ${ITEM} | ${CUTBINARY} -d ',' -f2)
+                    LogText "Installed package: ${sPKG_NAME} (version: ${sPKG_VERSION})"
+                    INSTALLED_PACKAGES="${INSTALLED_PACKAGES}|${ITEM}"
+                done
+            fi
         fi
     fi
 #
