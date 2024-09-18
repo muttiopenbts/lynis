@@ -74,6 +74,7 @@
             IFS_OLD=$IFS
             IFS=$'\n' 
             SPACKAGES=$(${ROOTDIR}usr/sbin/pkg info)
+            COUNT=0
 
             Display --indent 4 --text "- Searching packages with pkg" --result "${STATUS_FOUND}" --color GREEN
             Report "package_manager[]=pkg"
@@ -84,12 +85,15 @@
             LogText "Output:"; LogText "-----"
 
             for ITEM in ${SPACKAGES}; do
+                COUNT=$((COUNT + 1))
                 sPKG_NAME=$(echo ${ITEM} | ${AWKBINARY} -F'  --  ' '{print $2}')
                 sPKG_VERSION=$(echo ${ITEM} | ${AWKBINARY} -F'  --  ' '{print $1}')
                 LogText "Installed package: ${sPKG_NAME} (version: ${sPKG_VERSION})"
+                Report "installed_package=${sPKG_NAME} (version: ${sPKG_VERSION})"
                 INSTALLED_PACKAGES="${INSTALLED_PACKAGES}|${ITEM}"
             done
             IFS=$IFS_OLD
+            Report "installed_packages_count=${COUNT}"
         else
             FIND=$(pkg -N 2>&1; echo $?)
             if [ "${FIND}" = "0" ]; then
