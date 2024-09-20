@@ -106,8 +106,9 @@ plugin=check_0_all_sharedlibs
 plugin=check_all_binary_libs
 plugin=check_all_sharedlib_libs
 plugin=check_all_sh_scripts
-plugin=check_uds_phase2
+plugin=check_uds
 plugin=inetd_services
+plugin=secrets
 
 disable-plugin=authentication
 disable-plugin=compliance
