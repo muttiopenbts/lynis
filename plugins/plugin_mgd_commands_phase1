@@ -1,0 +1,71 @@
+#!/bin/sh
+
+#########################################################################
+#
+#    * DO NOT REMOVE *
+#-----------------------------------------------------
+# PLUGIN_AUTHOR=Junos Admin
+# PLUGIN_CATEGORY=UI
+# PLUGIN_DATE=2024-10-16
+# PLUGIN_DESC=Gather Junos command capabilities
+# PLUGIN_NAME=mgd_commands
+# PLUGIN_REQUIRED_TESTS=
+# PLUGIN_PACKAGE=
+# PLUGIN_VERSION=0.1.0
+#-----------------------------------------------------
+#
+#########################################################################
+#
+    MGD_CMDS=""
+#
+#########################################################################
+#
+
+list_mgd_cmds() {
+    #start
+    LogText "Test: List available Junos management commands"
+
+    # define some constant
+    IFS_OLD=$IFS
+    IFS=$'\n'
+    mgd_cmds=''
+
+    LogText "Test: MGD commands"
+    mgd_cmds=$(${MGDBINARY} list-perm | ${GREPBINARY} 'juniper-command' | ${SORTBINARY} -s -n -k 1,1 | ${AWKBINARY} '{$1=""; gsub(/^ /, "", $0); print $0}')
+
+    for each_cmd in ${mgd_cmds};
+    do
+        ReportFile '/var/log/mgd_cmds' "mgd_commands[]=${each_cmd}"
+    done
+    IFS=$IFS_OLD
+}
+
+#########################################################################
+#
+    # Add custom section to screen output
+    InsertSection "MGD UI ENTRIES"
+#
+#################################################################################
+#
+    # Test        : MGD-CUST-0001
+    # Description : 
+
+    # We consider it to be a lightweight test (no heavy IO, or long searches), no network connection needed
+    Register --test-no MGD-CUST-0001 --weight L --network NO --description "Collect list of possible Junos management commands"
+    if [ ${SKIPTEST} -eq 0 ]; then
+        # The Display function makes it easy to show something on screen, with colors.
+        # --indent  defines amount of spaces
+        # --text    text to be displayed on screen
+        # --result  text at end of line
+        # --color   color of result text
+        Display --indent 2 --text "- Obtain mgd commands" --result OK --color GREEN
+        list_mgd_cmds;
+    fi
+#
+#################################################################################
+#
+
+# Wait for keypress (unless --quick is being used)
+WaitForKeyPress
+
+#EOF

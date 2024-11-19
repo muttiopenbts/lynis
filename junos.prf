@@ -109,6 +109,7 @@ plugin=check_all_sh_scripts
 plugin=check_uds
 plugin=inetd_services
 plugin=secrets
+plugin=mgd_commands
 
 disable-plugin=authentication
 disable-plugin=compliance

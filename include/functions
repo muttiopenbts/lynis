@@ -2876,7 +2876,6 @@
         fi
       }
 
-
     ################################################################################
     # Name        : Report()
     # Description : Store data in the report file
@@ -2884,6 +2883,7 @@
     # Parameters  : $1 = data (format: key=value)
     # Returns     : <nothing>
     ################################################################################
+
 
     Report() {
         if [ ${CREATE_REPORT_FILE} -eq 1 ]; then echo "$1" >> ${REPORTFILE}; fi
@@ -2901,6 +2901,7 @@
     # Notes       : Need to check for values (strip out semicolons from values)
     #               Only add fields which are filled in
     ################################################################################
+
 
     ReportDetails() {
         TEST_DESCRIPTION=""
@@ -2970,6 +2971,20 @@
         if [ ${QUIET} -eq 0 ]; then
             DisplayException "$1" "$2"
         fi
+    }
+
+
+    ################################################################################
+    # Name        : ReportFile()
+    # Description : Store data in a separate report file.
+    #
+    # Parameters  : $1 = file path and name
+    # Parameters  : $2 = data (format: key=value)
+    # Returns     : <nothing>
+    ################################################################################
+
+    ReportFile() {
+        echo "$2" >> ${1}
     }
 
 
