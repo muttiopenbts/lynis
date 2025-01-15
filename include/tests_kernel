@@ -41,7 +41,7 @@
     if [ ${SKIPTEST} -eq 0 ]; then
         # Checking if we can find the systemd default target
         LogText "Test: Checking for systemd default.target"
-        if [ $(${SYSTEMCTLBINARY} get-default) ]; then
+        if [ $( [ ! -z ${SYSTEMCTLBINARY} ] && ${SYSTEMCTLBINARY} get-default) ]; then
             FIND=$(${SYSTEMCTLBINARY} get-default)
             FIND2=$(${ECHOCMD} ${FIND} | ${EGREPBINARY} "runlevel5|graphical")
             if HasData "${FIND2}"; then
@@ -176,6 +176,7 @@
             # Checking if any modules are loaded
             FIND=$(${LSMODBINARY} | ${GREPBINARY} -v "^Module" | wc -l | ${TRBINARY} -s ' ' | ${TRBINARY} -d ' ')
             Display --indent 2 --text "- Checking kernel type" --result "${STATUS_DONE}" --color GREEN
+            MONOLITHIC_KERNEL_TESTED=1
             if [ "${FIND}" = "0" ]; then
                 LogText "Result: Found monolithic kernel"
                 Report "linux_kernel_type=monolithic"

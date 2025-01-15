@@ -1,6 +1,35 @@
 # Lynis Changelog
 
-## Lynis 3.1.2 (not released yet)
+## Lynis 3.1.4 (not released yet)
+
+### Changed
+- Update of translations: Portuguese
+- Add macOS Sequoia
+- Update of EOL database
+- Bugfix for using slashes in parameters (SafeInput function)
+
+---------------------------------------------------------------------------------
+
+## Lynis 3.1.3 (2024-12-16)
+
+This release introduces additional documentation in the form of blog articles
+to support the (missing) control information on the website. 
+
+### Added
+- Detection of Buildroot, Fedora Linux Asahi Remix, Garden Linux, Peppermint OS
+- Support for blog posts and articles to enhance suggestions
+
+### Changed
+- BOOT-5264 - Changed output of systemd-analyze test and added link
+- FILE-6398 - Test temporarily disabled as on modern kernels JDB support is built-in
+- FIRE-4508 - Several changes to expand the test, make it more generic, resolve minor issues
+- KRNL-5622 - Test if systemctl binary is set
+- Several improvements for busybox
+- Update of translations: Italian, Russian, Spanish
+
+---------------------------------------------------------------------------------
+
+## Lynis 3.1.2 (2024-09-26)
 
 ### Added
 - Detection of ALT Linux
@@ -19,7 +48,7 @@
 ### Changed
 - Correction of software EOL database and inclusion of AIX entries
 - Support sysctl value perf_event_paranoid -> 2|3
-- Update of translations: German, Portuguest, Turkish
+- Update of translations: German, Portuguese, Turkish
 - Grammar and spell improvements
 - Improved package detection on Alpine Linux
 - Slackware support to check installed packges (functionPackageIsInstalled())
